@@ -10,3 +10,293 @@ A statement is a string of characters that the database recognizes as a valid co
 * UPDATE edits a row in a table.
 * DELETE FROM deletes rows from a table.
 
+
+
+
+Case
+
+
+select name,
+case 
+when imdb_rating >8 Then "It is fantastic"
+
+when imdb_rating >6 Then "It is poorly received"
+
+else  "Avoid all costs"
+end 
+from movies;
+
+select name,
+case 
+when imdb_rating >8 Then "It is fantastic"
+
+when imdb_rating >6 Then "It is poorly received"
+
+else  "Avoid all costs"
+end AS "Review" 
+from movies;
+
+
+
+
+.
+Let’s try one on your own.
+Select the name column and use a CASE statement to create the second column that is:
+* ‘Chill’ if genre = 'romance'
+* ‘Chill’ if genre = 'comedy'
+* ‘Intense’ in all other cases
+Optional: Rename the whole CASE statement to ‘Mood’ using AS.
+Give it your best shot! Check hint for the answer.
+
+
+
+
+
+select name,
+case 
+when genre ="comedy" Then "Chill"
+
+when genre ="romance" Then "Chill"
+
+else  "Intense"
+end AS "Mood" 
+from movies;
+* 
+
+SELECT is the clause we use every time we want to query information from a database.
+* AS renames a column or table.
+* DISTINCT return unique values.
+* WHERE is a popular command that lets you filter the results of the query based on conditions that you specify.
+* LIKE and BETWEEN are special operators.
+* AND and OR combines multiple conditions.
+* ORDER BY sorts the result.
+* LIMIT specifies the maximum number of rows that the query will return.
+* CASE creates different outputs.
+* 
+
+
+AGGREGATE FUNCTIONS
+
+
+COUNT(): count the number of rows
+* SUM(): the sum of the values in a column
+* MAX()/MIN(): the largest/smallest value
+* AVG(): the average of the values in a column
+* ROUND(): round the values in the column
+
+
+
+SUM
+
+   Select sum (downloads)
+ 
+
+from fake_apps
+
+Max / Min
+2 min
+The MAX() and MIN() functions return the highest and lowest values in a column, respectively.
+How many downloads does the most popular app have?
+SELECT MAX(downloads)
+FROM fake_apps;
+
+
+AVG
+
+SELECT AVG(downloads)
+FROM fake_apps;
+
+ROUND
+
+function takes two arguments inside the parenthesis:
+1. a column name
+2. an integer
+It rounds the values in the column to the number of decimal places specified by the integer.
+
+SELECT ROUND(price, 0)
+FROM fake_apps;
+
+
+
+	
+ROUND(AVG(price), 2)
+	
+SELECT Round(AVG(price) ,2)
+FROM fake_apps;
+
+
+
+GROUP BY 
+
+SELECT category, sum(downloads) 
+FROM fake_apps
+group by category
+
+Having 
+
+
+* HAVING is very similar to WHERE. In fact, all types of WHERE clauses you learned about thus far can be used with HAVING.
+
+* 
+When we want to limit the results of a query based on an aggregate property, use HAVING.
+HAVING statement always comes after GROUP BY, but before ORDER BY and LIMIT.
+
+* Congrats!
+* SUM(): the sum of the values in a column
+* MAX()/MIN(): the largest/smallest value
+* AVG(): the average of the values in a column
+* ROUND(): round the values in the column
+Aggregate functions combine multiple rows together to form a single value of more meaningful information.
+* GROUP BY is a clause used with aggregate functions to combine data from one or more columns.
+* HAVING limit the results of a query based on an aggregate property.
+
+
+Combining Tables with SQL
+
+If we want to combine orders and customers, we would type:
+SELECT *
+FROM orders
+JOIN customers
+  ON orders.customer_id = customers.customer_id;
+
+
+
+Instructions
+Checkpoint 1 Passed
+1.
+Join orders table and subscriptions table and select all columns.
+
+Make sure to join on the subscription_id column.
+
+Suppose we do:
+
+SELECT *
+FROM orders
+LIMIT 10;
+
+SELECT *
+FROM subscriptions
+LIMIT 10;
+
+You will notice that both orders table and subscriptions table have a subscription_id column.
+
+And we want to match these two columns:
+
+orders.subscription_id
+subscriptions.subscription_id
+SELECT *
+FROM orders
+JOIN subscriptions
+  ON orders.subscription_id = subscriptions.subscription_id;
+
+Notice that in the column subscriptions.subscription_id, the table name has a ‘s’ in the end.
+
+Important: only include the first query to pass checkpoint 1.
+
+Checkpoint 2 Failed, try again
+2.
+Don’t remove the previous query.
+
+Add a second query after your first one that only selects rows from the join where description is equal to ‘Fashion Magazine’.
+
+The WHERE clause goes after the JOIN!
+
+Answer:
+
+Join k saath On zaroor lagay ga
+
+select count(*) from newspaper;
+
+select count(*) from online;
+
+select Count(*) from newspaper
+join online 
+on newspaper.id = online.id
+
+SELECT *
+FROM online
+LIMIT 10;
+
+
+Left  Joins 
+
+The first and last rows have matching values of c2. The middle rows do not match. The final result will keep all rows of the first table but will omit the un-matched row from the second table.
+
+
+SELECT *
+FROM table1
+LEFT JOIN table2
+  ON table1.c2 = table2.c2;
+
+
+select * 
+from newspaper
+left join online
+on newspaper.id  = online.id
+
+Primary Key vs Foreign Key
+
+
+Suppose Columbia University has two tables in their database:
+* The classes table contains information on the classes that the school offers. Its primary key is id.
+* The students table contains information on all students in the school. Its primary key is id. It contains the foreign key class_id, which corresponds to the primary key of classes.
+Perform an inner join of classes and students using the primary and foreign keys described above, and select all the columns.
+
+
+
+
+SELECT *
+FROM classes
+JOIN students
+  ON classes.id = students.class_id;
+
+
+
+Cross Join
+
+Notice that cross joins don’t require an ON statement. You’re not really joining on any columns!
+
+select count(*) from newspaper
+where start_month <=3 AND end_month>=3;
+
+
+SELECT *
+FROM newspaper
+CROSS JOIN months;
+
+SELECT *
+FROM newspaper
+CROSS JOIN months
+WHERE newspaper.start_month <= months.month 
+AND newspaper.end_month >= months.month;
+
+Union 
+
+select * from newspaper 
+union 
+
+select *  from online
+
+
+
+WITH 
+
+* The WITH statement allows us to perform a separate query (such as aggregating customer’s subscriptions)
+* previous_results is the alias that we will use to reference any columns from the query inside of the WITH clause
+* We can then go on to do whatever we want with this temporary table (such as join the temporary table with another table)
+* 
+
+JOIN will combine rows from different tables if the join condition is true.
+* LEFT JOIN will return every row in the left table, and if the join condition is not met, NULL values are used to fill in the columns from the right table.
+* Primary key is a column that serves a unique identifier for the rows in the table.
+* Foreign key is a column that contains the primary key to another table.
+* CROSS JOIN lets us combine all rows of one table with all rows of another table.
+* UNION stacks one dataset on top of another.
+* WITH allows us to define one or more temporary tables that can be used in the final query.
+
+
+
+
+
+
+
